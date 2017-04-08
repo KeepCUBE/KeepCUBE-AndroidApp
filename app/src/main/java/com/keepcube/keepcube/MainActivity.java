@@ -1,11 +1,8 @@
 package com.keepcube.keepcube;
 
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.FragmentManager;
-import android.view.View;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -14,6 +11,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.keepcube.keepcube.Fragment.AccessoriesFragment;
 import com.keepcube.keepcube.Fragment.ConfigFragment;
 import com.keepcube.keepcube.Fragment.HomeFragment;
 import com.keepcube.keepcube.Fragment.RoomsFragment;
@@ -27,6 +25,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     HomeFragment homeFragment = new HomeFragment();
     RoomsFragment roomsFragment = new RoomsFragment();
     ConfigFragment configFragment = new ConfigFragment();
+    AccessoriesFragment accessoriesFragment = new AccessoriesFragment();
 
     Toolbar toolbar = null;
 
@@ -35,10 +34,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        final AppPreferences prefs = new AppPreferences(this);
-
-
-
+        AppPreferences prefs = new AppPreferences(this);
 
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -59,8 +55,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // TODO: 20.03.2017 udelat aby se po spusteni zobrazil posledni navstiveny fragment.
 
 
-
-
     }
 
     @Override
@@ -79,7 +73,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
-
 
 
     @Override
@@ -116,56 +109,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 fragmentManager.beginTransaction().replace(R.id.fragment_container, homeFragment).commit();
                 break;
 
+            case R.id.nav_accessories:
+                toolbar.setTitle("Accessories");
+                fragmentManager.beginTransaction().replace(R.id.fragment_container, accessoriesFragment).commit();
+                break;
+
             case R.id.nav_rooms:
                 toolbar.setTitle("Místnosti");
                 fragmentManager.beginTransaction().replace(R.id.fragment_container, roomsFragment).commit();
                 break;
 
-
-
-
-
             case R.id.nav_conf:
                 toolbar.setTitle("Config");
                 fragmentManager.beginTransaction().replace(R.id.fragment_container, configFragment).commit();
                 break;
-
-
-
-
-
-//
-//            case R.id.nav_chat:
-//                toolbar.setTitle("Třídní chat");
-//                fragmentManager.beginTransaction().replace(R.id.fragment_container, chatFragment).commit();
-//                break;
-//
-//            case R.id.nav_hlaska:
-//                toolbar.setTitle("Hláška minulého týdne");
-//                fragmentManager.beginTransaction().replace(R.id.fragment_container, hlaskaFragment).commit();
-//                break;
-//
-//            case R.id.nav_supl:
-//                toolbar.setTitle("Suplování");
-//                fragmentManager.beginTransaction().replace(R.id.fragment_container, suplFragment).commit();
-//                break;
-//
-//            case R.id.nav_news:
-//                toolbar.setTitle("Aktuality");
-//                fragmentManager.beginTransaction().replace(R.id.fragment_container, newsFragment).commit();
-//                break;
-//
-//            case R.id.nav_access:
-//                toolbar.setTitle("Přístupový čip");
-//                fragmentManager.beginTransaction().replace(R.id.fragment_container, accessFragment).commit();
-//                break;
-//
-//            case R.id.nav_menu:
-//                toolbar.setTitle("Jídelníček");
-//                fragmentManager.beginTransaction().replace(R.id.fragment_container, menuFragment).commit();
-//                break;
         }
-
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

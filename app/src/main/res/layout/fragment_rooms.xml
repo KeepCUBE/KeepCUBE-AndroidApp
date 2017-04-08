@@ -14,7 +14,7 @@
         android:clickable="true"
         android:tint="#ffffff"
         app:fabSize="normal"
-        app:srcCompat="@drawable/ic_menu_add" />
+        app:srcCompat="@drawable/ic_add" />
 
 
     <android.support.v7.widget.RecyclerView
