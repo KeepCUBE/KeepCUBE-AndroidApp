@@ -19,6 +19,8 @@ import net.grandcentrix.tray.AppPreferences;
 
 import java.util.ArrayList;
 
+import es.dmoral.toasty.Toasty;
+
 /**
  * A simple {@link Fragment} subclass.
  */
@@ -71,7 +73,7 @@ public class HomeFragment extends Fragment {
         for (int i = 0; i < users.size(); i++)
             html = html.concat(String.format("<b>%s</b>,&ensp;%s,&ensp;<i>%s</i><br>", users.get(i), ipAddresses.get(i), macAddresses.get(i)));
 
-        html = html.substring(0, html.length() - 4);
+        html = html.substring(0, html.length() - 4); // remove <br> at the end
 
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
             usersField.setText(Html.fromHtml(html, Html.FROM_HTML_MODE_LEGACY));
@@ -82,25 +84,25 @@ public class HomeFragment extends Fragment {
 
 
 
-
         temperature.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(context, "Teplota", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(context, "Teplota", Toast.LENGTH_SHORT).show();
+                Toasty.error(context, "This is an error toast.", Toast.LENGTH_SHORT, true).show();
             }
         });
 
         humidity.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(context, "Vlhkost", Toast.LENGTH_SHORT).show();
+                Toasty.success(context, "Success!", Toast.LENGTH_SHORT, true).show();
             }
         });
 
         pressure.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(context, "Tlak", Toast.LENGTH_SHORT).show();
+                Toasty.info(context, "Here is some info for you.", Toast.LENGTH_SHORT, true).show();
             }
         });
 

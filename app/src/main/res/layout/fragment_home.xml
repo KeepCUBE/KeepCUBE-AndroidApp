@@ -51,7 +51,7 @@
                         android:layout_margin="4dp"
                         android:adjustViewBounds="true"
                         android:tint="@color/iconColor"
-                        app:srcCompat="@drawable/ic_menu_temperature" />
+                        app:srcCompat="@drawable/ic_temperature" />
 
                     <TextView
                         android:id="@+id/textView4"
@@ -146,7 +146,7 @@
                         android:layout_margin="4dp"
                         android:adjustViewBounds="true"
                         android:tint="@color/iconColor"
-                        app:srcCompat="@drawable/ic_menu_pressure" />
+                        app:srcCompat="@drawable/ic_pressure" />
 
                     <TextView
                         android:id="@+id/textView6"

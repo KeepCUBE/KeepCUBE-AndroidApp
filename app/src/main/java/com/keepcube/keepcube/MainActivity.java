@@ -50,6 +50,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
         // Custom
+        toolbar.setTitle("KeepCUBE Dashboard");
         navigationView.setCheckedItem(R.id.nav_home);
         fragmentManager.beginTransaction().replace(R.id.fragment_container, homeFragment).commit();
         // TODO: 20.03.2017 udelat aby se po spusteni zobrazil posledni navstiveny fragment.

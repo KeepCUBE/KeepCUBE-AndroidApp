@@ -16,9 +16,7 @@ import com.keepcube.keepcube.R;
 
 import net.grandcentrix.tray.AppPreferences;
 
-/**
- * A simple {@link Fragment} subclass.
- */
+
 public class AccessoriesFragment extends Fragment {
     public TabLayout tabLayout;
     public ViewPager viewPager;
@@ -56,15 +54,13 @@ public class AccessoriesFragment extends Fragment {
 
         @Override
         public Fragment getItem(int position) {
-            switch (position) {
-                case 0:
-                    return new TabLEDFragment();
-                case 1:
-                    return new TabLEDFragment();
-                case 2:
-                    return new TabLEDFragment();
-            }
-            return new TabLEDFragment();
+            Bundle bundle = new Bundle();
+            bundle.putInt("position", position);
+            bundle.putString("edttext", "Bundle test");
+            TabRoomFragment fragobj = new TabRoomFragment();
+            fragobj.setArguments(bundle);
+
+            return fragobj;
         }
 
         @Override
@@ -76,7 +72,7 @@ public class AccessoriesFragment extends Fragment {
         public CharSequence getPageTitle(int position) {
             switch (position) {
                 case 0:
-                    return "Obejvák";
+                    return "Obývák";
                 case 1:
                     return "Sklep";
                 case 2:

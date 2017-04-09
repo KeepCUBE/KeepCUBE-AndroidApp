@@ -8,9 +8,15 @@
     <color name="background">#eeeeee</color>
     <color name="divider">#e4e4e4</color>
 
-    <color name="iconColor">#ff888888</color>
+    <color name="iconColor">#888888</color>
     <color name="white">#fff</color>
     <color name="tabColor">#455a64</color>
     <color name="inactiveTabTextColor">#c3cfd5</color>
+
+    <!--Text & icons-->
+    <color name="textPrimary">#de000000</color>
+    <color name="textSecondary">#8a000000</color>
+    <color name="textInactive">#61000000</color>
+
 
 </resources>
