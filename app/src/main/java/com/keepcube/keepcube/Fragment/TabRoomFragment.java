@@ -3,15 +3,22 @@ package com.keepcube.keepcube.Fragment;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.keepcube.keepcube.R;
+import com.keepcube.keepcube.Tools.RoomsRecyclerAdapter;
 
 import net.grandcentrix.tray.AppPreferences;
+
+import java.util.ArrayList;
+
+import es.dmoral.toasty.Toasty;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -23,6 +30,11 @@ public class TabRoomFragment extends Fragment {
         // Required empty public constructor
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -31,13 +43,28 @@ public class TabRoomFragment extends Fragment {
         Context context = getContext();
         Bundle bundle = getArguments();
 
-
-        String strtext = bundle.getString("edttext");
         int pos = bundle.getInt("position", -1);
 
 
+        ArrayList<String> names = new ArrayList<String>();
+        ArrayList<Integer> numberOfDevices = new ArrayList<Integer>();
 
-        ((TextView) view.findViewById(R.id.bablbambambam)).setText(strtext + ", position: " + pos);
+        names.add("1");
+        names.add("2");
+        names.add("3");
+        names.add("4");
+
+        numberOfDevices.add(2);
+        numberOfDevices.add(4);
+        numberOfDevices.add(1);
+        numberOfDevices.add(8);
+
+
+        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.accessoriesRecycler);
+        recyclerView.setHasFixedSize(false); // prej zlepší výkon, jde o layout size
+        recyclerView.setLayoutManager(new LinearLayoutManager(context));
+        recyclerView.setAdapter(new RoomsRecyclerAdapter(names, numberOfDevices));
+
 
         return view;
     }

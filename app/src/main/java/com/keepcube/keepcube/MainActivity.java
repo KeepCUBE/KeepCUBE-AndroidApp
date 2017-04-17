@@ -1,5 +1,6 @@
 package com.keepcube.keepcube;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
@@ -15,6 +16,7 @@ import com.keepcube.keepcube.Fragment.AccessoriesFragment;
 import com.keepcube.keepcube.Fragment.ConfigFragment;
 import com.keepcube.keepcube.Fragment.HomeFragment;
 import com.keepcube.keepcube.Fragment.RoomsFragment;
+import com.keepcube.keepcube.Service.DataManager;
 
 import net.grandcentrix.tray.AppPreferences;
 
@@ -26,6 +28,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     RoomsFragment roomsFragment = new RoomsFragment();
     ConfigFragment configFragment = new ConfigFragment();
     AccessoriesFragment accessoriesFragment = new AccessoriesFragment();
+
 
     Toolbar toolbar = null;
 
@@ -54,6 +57,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationView.setCheckedItem(R.id.nav_home);
         fragmentManager.beginTransaction().replace(R.id.fragment_container, homeFragment).commit();
         // TODO: 20.03.2017 udelat aby se po spusteni zobrazil posledni navstiveny fragment.
+
+
+        final Intent intent = new Intent(getApplicationContext(), DataManager.class);
+        getApplicationContext().startService(intent);
 
 
     }
@@ -95,6 +102,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //            Toast.makeText(this, "onOptionsItemSelected()", Toast.LENGTH_SHORT).show();
             return true;
         }
+
+
+        if (id == R.id.action_update) {
+            DataManager.update(getApplicationContext());
+            return true;
+        }
+
 
         return super.onOptionsItemSelected(item);
     }
