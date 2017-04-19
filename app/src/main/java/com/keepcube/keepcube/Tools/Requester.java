@@ -15,7 +15,9 @@ public class Requester {
     Context context;
     RequestQueue requestQueue;
 
-    Requester(Context c) {
+
+    public void begin(Context c) {
+
         context = c;
         requestQueue = Volley.newRequestQueue(context);
 
@@ -23,7 +25,7 @@ public class Requester {
 
 
 
-    void addUser() {
+    public void addDevice() {
 
 
 

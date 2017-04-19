@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.keepcube.keepcube.R;
+import com.keepcube.keepcube.Tools.AccessoriesRecyclerAdapter;
 import com.keepcube.keepcube.Tools.RoomsRecyclerAdapter;
 
 import net.grandcentrix.tray.AppPreferences;

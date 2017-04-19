@@ -1,9 +1,11 @@
 package com.keepcube.keepcube;
 
-import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -16,20 +18,19 @@ import com.keepcube.keepcube.Fragment.AccessoriesFragment;
 import com.keepcube.keepcube.Fragment.ConfigFragment;
 import com.keepcube.keepcube.Fragment.HomeFragment;
 import com.keepcube.keepcube.Fragment.RoomsFragment;
-import com.keepcube.keepcube.Service.DataManager;
+import com.keepcube.keepcube.Tools.DataManager.Device;
+import com.keepcube.keepcube.Tools.DataManager.Home;
 
 import net.grandcentrix.tray.AppPreferences;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
+    public static boolean updateRecyclerViews = false;
     FragmentManager fragmentManager = getSupportFragmentManager();
-
     HomeFragment homeFragment = new HomeFragment();
     RoomsFragment roomsFragment = new RoomsFragment();
     ConfigFragment configFragment = new ConfigFragment();
     AccessoriesFragment accessoriesFragment = new AccessoriesFragment();
-
-
     Toolbar toolbar = null;
 
     @Override
@@ -53,14 +54,28 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
         // Custom
-        toolbar.setTitle("KeepCUBE Dashboard");
+        toolbar.setTitle("KeepCUBE");
         navigationView.setCheckedItem(R.id.nav_home);
         fragmentManager.beginTransaction().replace(R.id.fragment_container, homeFragment).commit();
         // TODO: 20.03.2017 udelat aby se po spusteni zobrazil posledni navstiveny fragment.
 
+//        final Intent intent = new Intent(getApplicationContext(), DataManager.class);
+//        getApplicationContext().startService(intent);
 
-        final Intent intent = new Intent(getApplicationContext(), DataManager.class);
-        getApplicationContext().startService(intent);
+
+        Home.update(getApplicationContext());
+
+        Home.addEmptyRoom("obejvak");
+        Home.addEmptyRoom("kuchyn");
+        Home.addEmptyRoom("sklep");
+
+        Home.room("obejvak").addDevice(Device.LED_STRIP, "ledky2");
+        Home.room("obejvak").addDevice(Device.LED_STRIP, "ledky3");
+        Home.room("obejvak").addDevice(Device.LED_STRIP, "ledky4");
+
+        Home.room("kuchyn").addDevice(Device.LED_STRIP, "Mixér");
+
+        Home.room("sklep").addDevice(Device.LED_STRIP, "ledky5");
 
 
     }
@@ -79,33 +94,45 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
+
+
+        MenuItem item = menu.findItem(R.id.action_update);
+        Drawable normalDrawable = item.getIcon();
+        Drawable wrapDrawable = DrawableCompat.wrap(normalDrawable);
+        DrawableCompat.setTint(wrapDrawable, ContextCompat.getColor(getApplicationContext(), R.color.white));
+        item.setIcon(wrapDrawable);
+
+
         return true;
     }
 
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-
             // TODO: 06.04.2017 Settings Activity!
 //            Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
 ////            intent.putExtra("key", value); //Optional parameters
 //            MainActivity.this.startActivity(intent);
-//
-//
 //            Toast.makeText(this, "onOptionsItemSelected()", Toast.LENGTH_SHORT).show();
             return true;
-        }
 
+        } else if (id == R.id.action_update) {
+            Home.update(getApplicationContext());
 
-        if (id == R.id.action_update) {
-            DataManager.update(getApplicationContext());
+            Home.addEmptyRoom("obejvak");
+            Home.addEmptyRoom("kuchyn");
+            Home.addEmptyRoom("sklep");
+
+            Home.room("obejvak").addDevice(Device.LED_STRIP, "ledky2");
+            Home.room("obejvak").addDevice(Device.LED_STRIP, "ledky3");
+            Home.room("kuchyn").addDevice(Device.LED_STRIP, "Mixér");
+            Home.room("sklep").addDevice(Device.LED_STRIP, "ledky5");
+
+            updateRecyclerViews = true;
+
             return true;
         }
 

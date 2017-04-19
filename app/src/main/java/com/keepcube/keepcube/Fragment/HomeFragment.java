@@ -5,21 +5,18 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
-import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.keepcube.keepcube.R;
 import com.keepcube.keepcube.Service.DataManager;
+import com.keepcube.keepcube.Tools.DataManager.Device;
+import com.keepcube.keepcube.Tools.DataManager.Home;
 
 import net.grandcentrix.tray.AppPreferences;
-
-import java.util.ArrayList;
 
 import es.dmoral.toasty.Toasty;
 
@@ -45,33 +42,44 @@ public class HomeFragment extends Fragment {
         CardView pressure = (CardView) view.findViewById(R.id.pressCard);
         TextView usersField = (TextView) view.findViewById(R.id.usersTextView);
 
-        DataManager.Users.add("Melichar", "192.168.0.255", "00:11:22:33:44:55");
-        DataManager.Users.add("Honimír", "192.168.0.88", "AA:BB:CC:DD:EE:FF");
-        DataManager.Users.add("Ohnislav", "192.168.0.128", "66:66:66:66:66:66");
-        DataManager.Users.add("Trautumberg", "192.168.0.12", "32:32:32:32:32:32");
-        DataManager.Users.add("Mánička", "192.168.0.33", "88:44:88:44:88:44");
 
 
-        DataManager.Accessories.add();
 
 
-        String html = "";
-        for (int i = 0; i < DataManager.Users.getUsersCount(); i++) {
 
-            String name = DataManager.Users.getName(i);
-            String ip = DataManager.Users.getIP(i);
-            String mac = DataManager.Users.getMAC(i);
 
-            html = html.concat(String.format("<b>%s</b>,&ensp;%s,&ensp;<i>%s</i><br>", name, ip, mac));
-        }
 
-        html = html.substring(0, html.length() - 4); // remove <br> at the end
 
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-            usersField.setText(Html.fromHtml(html, Html.FROM_HTML_MODE_LEGACY));
-        } else {
-            usersField.setText(Html.fromHtml(html));
-        }
+
+
+
+//        DataManager.Users.add("Melichar", "192.168.0.255", "00:11:22:33:44:55");
+//        DataManager.Users.add("Honimír", "192.168.0.88", "AA:BB:CC:DD:EE:FF");
+//        DataManager.Users.add("Ohnislav", "192.168.0.128", "66:66:66:66:66:66");
+//        DataManager.Users.add("Trautumberg", "192.168.0.12", "32:32:32:32:32:32");
+//        DataManager.Users.add("Mánička", "192.168.0.33", "88:44:88:44:88:44");
+
+
+//        DataManager.Accessories.add();
+
+
+//        String html = "";
+//        for (int i = 0; i < DataManager.Users.getUsersCount(); i++) {
+//
+//            String name = DataManager.Users.getName(i);
+//            String ip = DataManager.Users.getIP(i);
+//            String mac = DataManager.Users.getMAC(i);
+//
+//            html = html.concat(String.format("<b>%s</b>,&ensp;%s,&ensp;<i>%s</i><br>", name, ip, mac));
+//        }
+
+//        html = html.substring(0, html.length() - 4); // remove <br> at the end
+//
+//        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+//            usersField.setText(Html.fromHtml(html, Html.FROM_HTML_MODE_LEGACY));
+//        } else {
+//            usersField.setText(Html.fromHtml(html));
+//        }
 
 
         temperature.setOnClickListener(new View.OnClickListener() {

@@ -15,6 +15,8 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.keepcube.keepcube.R;
+import com.keepcube.keepcube.Tools.DataManager.Device;
+import com.keepcube.keepcube.Tools.DataManager.Home;
 
 import net.grandcentrix.tray.AppPreferences;
 
@@ -55,6 +57,7 @@ public class AccessoriesFragment extends Fragment {
             }
         });
 
+
         return view;
     }
 
@@ -66,11 +69,11 @@ public class AccessoriesFragment extends Fragment {
         }
 
         @Override
-        public Fragment getItem(int position) {
+        public Fragment getItem(int roomPosition) {
             Bundle bundle = new Bundle();
-            TabRoomFragment fragment = new TabRoomFragment();
+            AccessoriesTabsFragment fragment = new AccessoriesTabsFragment();
 
-            bundle.putInt("position", position);
+            bundle.putInt("roomPosition", roomPosition);
             fragment.setArguments(bundle);
 
             return fragment;
@@ -78,24 +81,12 @@ public class AccessoriesFragment extends Fragment {
 
         @Override
         public int getCount() {
-            return 5;
+            return Home.getNumberOfRooms();
         }
 
         @Override
         public CharSequence getPageTitle(int position) {
-            switch (position) {
-                case 0:
-                    return "Obývák";
-                case 1:
-                    return "Kuchyň";
-                case 2:
-                    return "Ložnice";
-                case 3:
-                    return "Koupelna";
-                case 4:
-                    return "Půda";
-            }
-            return "null";
+            return Home.getRoomNameByIndex(position);
         }
     }
 }
