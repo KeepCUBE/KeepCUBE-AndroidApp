@@ -1,20 +1,22 @@
 package com.keepcube.keepcube.Tools.DataManager;
 
 import android.content.Context;
-import android.support.v4.util.ArrayMap;
-import android.util.Log;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.widget.Toast;
 
-import com.android.volley.NetworkResponse;
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.HttpHeaderParser;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
+import com.afollestad.bridge.Bridge;
+import com.afollestad.bridge.BridgeException;
+import com.afollestad.bridge.Callback;
+import com.afollestad.bridge.Request;
+import com.afollestad.bridge.Response;
+import com.keepcube.keepcube.Fragment.AccessoriesFragment;
+import com.keepcube.keepcube.MainActivity;
 
-import java.io.UnsupportedEncodingException;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 
 import es.dmoral.toasty.Toasty;
@@ -26,125 +28,162 @@ import es.dmoral.toasty.Toasty;
 public class Home {
     //        static ArrayList<Device> deviceList = new ArrayList<>();
 //        static ArrayList<Room> roomList = new ArrayList<>();
-    static ArrayMap<String, Room> roomList = new ArrayMap<>();
-    // TODO: 19.04.2017 userList
-    ArrayList<String> macList = new ArrayList<String>();
-
+//    static ArrayMap<String, Room> roomList = new ArrayMap<>();
+    public static ArrayList<Room> roomList = new ArrayList<>();
 
     static String TAG = "Home";
+    // TODO: 19.04.2017 userList
+    ArrayList<String> macList = new ArrayList<String>();
 
     public Home() {
         // TODO: 19.04.2017 nazev domu, url keepcuby, atd
     }
 
-    public static void addEmptyRoom(String name) {
-        Room room = new Room(name);
-        roomList.put(room.getName(), room);
+    public static void addEmptyRoom(@NonNull int db_id, @NonNull String db_name, @Nullable String db_description) {
+//        Room room = new Room(name);
+//        roomList.put(room.getName(), room);
+
+        if (!roomList.contains(new Room(db_id, db_name, db_description))) {
+            roomList.add(new Room(db_id, db_name, db_description));
+        }
+
     }
 
-    public static void update() {
-        // TODO: 19.04.2017 stahnuti a rozdeleni dat z api
-    }
-
-    public static Room room(String name) {
-        return roomList.get(name);
-    }
-
-    public void addRoom(String name, Room room) {
-        roomList.put(name, room);
-    }
-
-    public void removeRoom(String name) {
-        roomList.remove(name);
-    }
-
-    public ArrayMap<String, Room> getRoomList() {
-        return roomList;
-    }
-
-
-//    @Deprecated
-//    public void addDevice(Device device, String roomName) {
-//
-//        Room room = roomList.get(roomName);
-//
-//        room.addDevice(device);
-//
-//
-//        roomList.put(roomName, room);
-//
-//
-////            deviceList.add(device);
-//    }
-
-    @Deprecated
-    public ArrayList<String> getRoomNames() {
-        ArrayList<String> names = new ArrayList<>();
-        for (int i = 0; i < roomList.size(); i++) names.set(i, roomList.keyAt(i));
-        return names;
+    public static Room room(int index) {
+        return roomList.get(index);
     }
 
     public static String getRoomNameByIndex(int index) {
-        String name = "";
-
-        name = roomList.keyAt(index);
-
-
-        return name;
+//        return roomList.keyAt(index);
+        return roomList.get(index).name;
     }
 
     public static int getNumberOfRooms() {
         return roomList.size();
     }
 
+    public static void updateAccessories(final Context context) {
 
 
-
-
-    public static void update(final Context context) {
-
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-
-                Volley.newRequestQueue(context).add(new StringRequest(Request.Method.GET, "http://httpstat.us/200",
-                        new Response.Listener<String>() {
-                            @Override
-                            public void onResponse(String response) {
-                                Toasty.success(context, "Updated successfully", Toast.LENGTH_SHORT, true).show();
-//                                Users.namesList.add();
-                            }
-                        },
-                        new Response.ErrorListener() {
-                            @Override
-                            public void onErrorResponse(VolleyError error) {
-                                Log.d(TAG, "onErrorResponse: hmmmmmmmmm :(");
-                                Toasty.error(context, "Base unreachable", Toast.LENGTH_SHORT, true).show();
-
-                            }
-                        }) {
+        Bridge
+                .get("/keepi/v1/rooms?includes=devices")
+                .request(new Callback() {
                     @Override
-                    protected Response<String> parseNetworkResponse(NetworkResponse response) {
-                        Log.d(TAG, "responseCode : " + response.statusCode);
+                    public void response(@NonNull Request request, Response response, BridgeException e) {
+                        if (e != null) {
+                            // See the 'Error Handling' section for information on how to process BridgeExceptions
+                            int reason = e.reason();
+                            System.out.println(String.valueOf(reason));
+                            Toasty.error(context, "Base unreachable", Toast.LENGTH_SHORT, true).show();
+                        } else {
+                            String responseContent = response.asString();
+                            System.out.println(responseContent);
 
-                        String utf8 = null;
-                        try {
-                            utf8 = new String(response.data, "UTF-8");
-                        } catch (UnsupportedEncodingException e) {
-                            e.printStackTrace();
+
+                            Room.deviceList.clear();
+                            Home.roomList.clear();
+
+
+                            try {
+                                JSONObject json = new JSONObject(responseContent);
+                                JSONArray rooms = json.getJSONArray("data");
+
+                                for (int i = 0; i < rooms.length(); i++) {
+                                    JSONObject room = rooms.getJSONObject(i);
+
+                                    int room_id = room.getInt("id");
+                                    String room_name = room.getString("name");
+                                    String description = room.getString("description");
+
+                                    Home.addEmptyRoom(room_id, room_name, description);
+//                                    MainActivity.updateRecyclerViews();
+//                                    AccessoriesFragment.updatePagerAdapter();
+
+                                    // TODO: 23.04.2017 fixnout aby nebyly stejny zarizeni ve vsech mistnostech
+
+                                    JSONArray devices = room.getJSONArray("devices");
+                                    for (int j = 0; j < devices.length(); j++) {
+                                        JSONObject device = devices.getJSONObject(j);
+
+                                        String device_name = device.getString("name");
+                                        int device_id = device.getInt("id");
+                                        int type_id = device.getInt("type_id");
+
+                                        int device_room_id = device.getInt("room_id"); // double check
+
+                                        if (device_room_id == room_id) {
+                                            System.out.println(getRoomIndexByID(room_id));
+                                            Home.room(getRoomIndexByID(room_id)).addDevice(device_name, device_id, type_id, -1);
+//                                            MainActivity.updateRecyclerViews();
+                                        }
+                                        else
+                                            Toasty.error(context, "Internal error", Toast.LENGTH_SHORT, true).show();
+
+                                    }
+
+
+
+
+
+                                }
+
+
+                            } catch (JSONException e1) {
+                                e1.printStackTrace();
+                            }
+
+
+                            Toasty.success(context, "Updated successfully", Toast.LENGTH_SHORT, true).show();
                         }
 
-                        return Response.success(utf8, HttpHeaderParser.parseCacheHeaders(response));
                     }
                 });
 
-            }
-        }, "DataUpdateThread").start();
+
+//        Bridge.get("/keepi/v1/devices")
+//                .request(new Callback() {
+//                    @Override
+//                    public void response(@NonNull Request request, Response response, BridgeException e) {
+//
+//                    }
+//                });
 
     }
 
 
+//    public void addRoom(String name, Room room) {
+//        roomList.put(name, room);
+//    }
 
+    public static int getRoomIDByIndex(int index) {
+        return roomList.get(index).id;
+    }
+
+    public static int getRoomIndexByID(int id) {
+        for (int i = 0; i < roomList.size(); i++) {
+            Room room = roomList.get(i);
+            if (room.id == id) return i;
+        }
+
+        // TODO: 23.04.2017 Bacha na to!
+        return 0;
+    }
+
+    @Deprecated
+    public void removeRoom(String name) {
+        roomList.remove(name);
+    }
+
+//    public ArrayMap<String, Room> getRoomList() {
+//        return roomList;
+//    }
+//
+//    @Deprecated
+//    public ArrayList<String> getRoomNames() {
+//        ArrayList<String> names = new ArrayList<>();
+//        for (int i = 0; i < roomList.size(); i++) names.set(i, roomList.keyAt(i));
+//        return names;
+//    }
 
 
 }

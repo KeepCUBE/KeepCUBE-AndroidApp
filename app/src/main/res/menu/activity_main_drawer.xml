@@ -20,24 +20,24 @@
         <item
             android:id="@+id/nav_rooms"
             android:icon="@drawable/ic_room"
-            android:title="Místnosti" />
+            android:title="Rooms" />
 
         <item
             android:id="@+id/nav_conf"
             android:icon="@drawable/ic_settings"
             android:title="Config" />
 
-        <item android:title="Others">
-            <menu>
-                <item
-                    android:icon="@drawable/ic_clock"
-                    android:title="Spam" />
+        <!--<item android:title="Others">-->
+            <!--<menu>-->
+                <!--<item-->
+                    <!--android:icon="@drawable/ic_clock"-->
+                    <!--android:title="Spam" />-->
 
-                <item
-                    android:icon="@drawable/ic_clock"
-                    android:title="Bin" />
-            </menu>
-        </item>
+                <!--<item-->
+                    <!--android:icon="@drawable/ic_clock"-->
+                    <!--android:title="Bin" />-->
+            <!--</menu>-->
+        <!--</item>-->
     </group>
 
 </menu>

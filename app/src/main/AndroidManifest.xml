@@ -16,6 +16,7 @@
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -24,8 +25,10 @@
             android:name=".Service.DataManager"
             android:enabled="true"
             android:exported="false" />
+        <service
+            android:name=".Service.NotificationChecker"
+            android:enabled="true"
+            android:exported="false"></service>
     </application>
 
-</manifest>
-
-    <!--android:roundIcon="@mipmap/ic_launcher_round"-->
+</manifest> <!-- android:roundIcon="@mipmap/ic_launcher_round" -->

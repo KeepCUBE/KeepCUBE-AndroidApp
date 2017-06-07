@@ -2,19 +2,20 @@ package com.keepcube.keepcube.Fragment;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.keepcube.keepcube.R;
-import com.keepcube.keepcube.Service.DataManager;
-import com.keepcube.keepcube.Tools.DataManager.Device;
-import com.keepcube.keepcube.Tools.DataManager.Home;
+import com.keepcube.keepcube.Service.NotificationChecker;
 
 import net.grandcentrix.tray.AppPreferences;
 
@@ -41,16 +42,24 @@ public class HomeFragment extends Fragment {
         CardView humidity = (CardView) view.findViewById(R.id.humCard);
         CardView pressure = (CardView) view.findViewById(R.id.pressCard);
         TextView usersField = (TextView) view.findViewById(R.id.usersTextView);
+        Switch notificationCheckerSwitch = (Switch) view.findViewById(R.id.notificationCheckerSwitch);
+
+        final Intent NotificationCheckerIntent = new Intent(context, NotificationChecker.class);
 
 
-
-
-
-
-
-
-
-
+        notificationCheckerSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    context.stopService(NotificationCheckerIntent);
+                    context.startService(NotificationCheckerIntent);
+                    Toasty.info(context, "Starting Notification Checker", Toast.LENGTH_SHORT, true).show();
+                } else {
+                    context.stopService(NotificationCheckerIntent);
+                    Toasty.info(context, "Stopping Notification Checker", Toast.LENGTH_SHORT, true).show();
+                }
+            }
+        });
 
 
 //        DataManager.Users.add("Melichar", "192.168.0.255", "00:11:22:33:44:55");
@@ -86,22 +95,21 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View v) {
 //                Toast.makeText(context, "Teplota", Toast.LENGTH_SHORT).show();
-                Toasty.error(context, "This is an error toast.", Toast.LENGTH_SHORT, true).show();
-                DataManager.update(context);
+//                Toasty.error(context, "This is an error toast.", Toast.LENGTH_SHORT, true).show();
             }
         });
 
         humidity.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toasty.success(context, "Success!", Toast.LENGTH_SHORT, true).show();
+//                Toasty.success(context, "Success!", Toast.LENGTH_SHORT, true).show();
             }
         });
 
         pressure.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toasty.info(context, "Here is some info for you.", Toast.LENGTH_SHORT, true).show();
+//                Toasty.info(context, "Here is some info for you.", Toast.LENGTH_SHORT, true).show();
             }
         });
 

@@ -13,15 +13,18 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
+import com.afollestad.bridge.Bridge;
 import com.keepcube.keepcube.Fragment.AccessoriesFragment;
 import com.keepcube.keepcube.Fragment.ConfigFragment;
 import com.keepcube.keepcube.Fragment.HomeFragment;
 import com.keepcube.keepcube.Fragment.RoomsFragment;
-import com.keepcube.keepcube.Tools.DataManager.Device;
 import com.keepcube.keepcube.Tools.DataManager.Home;
 
 import net.grandcentrix.tray.AppPreferences;
+
+import es.dmoral.toasty.Toasty;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -32,6 +35,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     ConfigFragment configFragment = new ConfigFragment();
     AccessoriesFragment accessoriesFragment = new AccessoriesFragment();
     Toolbar toolbar = null;
+
+    public static void updateRecyclerViews() {
+        updateRecyclerViews = true;
+    }
+
+    public static boolean shouldUpdateRecyclerViews() {
+        return updateRecyclerViews;
+    }
+
+    public static void recyclerViewsUpdated() {
+        updateRecyclerViews = false;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,23 +74,27 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         fragmentManager.beginTransaction().replace(R.id.fragment_container, homeFragment).commit();
         // TODO: 20.03.2017 udelat aby se po spusteni zobrazil posledni navstiveny fragment.
 
-//        final Intent intent = new Intent(getApplicationContext(), DataManager.class);
-//        getApplicationContext().startService(intent);
 
+        Bridge.config()
+                .host("http://keepcube.cz:10380")
+                .defaultHeader("Accept", "application/json");
 
-        Home.update(getApplicationContext());
+//     Home.addEmptyRoom(4, "Sklep", null);
+//        Home.addEmptyRoom(1, "Komín", null);
 
-        Home.addEmptyRoom("obejvak");
-        Home.addEmptyRoom("kuchyn");
-        Home.addEmptyRoom("sklep");
+        Home.updateAccessories(getApplicationContext());
 
-        Home.room("obejvak").addDevice(Device.LED_STRIP, "ledky2");
-        Home.room("obejvak").addDevice(Device.LED_STRIP, "ledky3");
-        Home.room("obejvak").addDevice(Device.LED_STRIP, "ledky4");
-
-        Home.room("kuchyn").addDevice(Device.LED_STRIP, "Mixér");
-
-        Home.room("sklep").addDevice(Device.LED_STRIP, "ledky5");
+//        Home.addEmptyRoom("obejvak");
+//        Home.addEmptyRoom("kuchyn");
+//        Home.addEmptyRoom("sklep");
+//
+//        Home.room("obejvak").addDevice(Device.KC_LED, "ledky2");
+//        Home.room("obejvak").addDevice(Device.KC_LED, "ledky3");
+//        Home.room("obejvak").addDevice(Device.KC_LED, "ledky4");
+//
+//        Home.room("kuchyn").addDevice(Device.KC_LED, "Mixér");
+//
+//        Home.room("sklep").addDevice(Device.KC_LED, "ledky5");
 
 
     }
@@ -106,33 +125,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
         if (id == R.id.action_settings) {
             // TODO: 06.04.2017 Settings Activity!
-//            Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
-////            intent.putExtra("key", value); //Optional parameters
-//            MainActivity.this.startActivity(intent);
-//            Toast.makeText(this, "onOptionsItemSelected()", Toast.LENGTH_SHORT).show();
+            Toasty.warning(getApplicationContext(), "Not yet implemented", Toast.LENGTH_SHORT, true).show();
             return true;
 
         } else if (id == R.id.action_update) {
-            Home.update(getApplicationContext());
-
-            Home.addEmptyRoom("obejvak");
-            Home.addEmptyRoom("kuchyn");
-            Home.addEmptyRoom("sklep");
-
-            Home.room("obejvak").addDevice(Device.LED_STRIP, "ledky2");
-            Home.room("obejvak").addDevice(Device.LED_STRIP, "ledky3");
-            Home.room("kuchyn").addDevice(Device.LED_STRIP, "Mixér");
-            Home.room("sklep").addDevice(Device.LED_STRIP, "ledky5");
-
-            updateRecyclerViews = true;
-
+            Home.updateAccessories(getApplicationContext());
+            updateRecyclerViews();
             return true;
         }
 

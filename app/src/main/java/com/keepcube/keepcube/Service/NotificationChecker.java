@@ -15,40 +15,33 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.keepcube.keepcube.Tools.Requester;
 
 import java.io.UnsupportedEncodingException;
 
 import es.dmoral.toasty.Toasty;
 
-@Deprecated
-public class DataManager extends Service {
+public class NotificationChecker extends Service {
     public static boolean isRunning;
     public static RequestQueue requestQueue;
-    static String TAG = "DataManager";
-    final Context context = DataManager.this;
+    static String TAG = "NotificationChecker";
+    final Context context = NotificationChecker.this;
     boolean mAllowRebind; // indicates whether onRebind should be used
     IBinder mBinder;      // interface for clients that bind
 
 
-    public DataManager() {
+    public NotificationChecker() {
     }
-
 
 
     @Override
     public void onCreate() {
-        requestQueue = Volley.newRequestQueue(context);
-
-
-
 
 
         new Thread(new Runnable() {
             @Override
             public void run() {
 
-                requestQueue.add(new StringRequest(Request.Method.GET, "http://httpstat.us/200",
+                Volley.newRequestQueue(context).add(new StringRequest(Request.Method.GET, "http://httpstat.us/200",
                         new Response.Listener<String>() {
                             @Override
                             public void onResponse(String response) {
@@ -80,11 +73,7 @@ public class DataManager extends Service {
                 });
 
             }
-        }, "DataUpdateThread").start();
-
-
-
-
+        }, "NotificationFetchingThread").start();
 
 
     }
@@ -93,8 +82,7 @@ public class DataManager extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         isRunning = true;
 
-//        return Service.START_STICKY;
-        return Service.START_NOT_STICKY;
+        return Service.START_STICKY;
     }
 
     @Override
@@ -119,58 +107,7 @@ public class DataManager extends Service {
     public void onDestroy() {
         // The service is no longer used and is being destroyed
         isRunning = false;
-        Toast.makeText(context, "Proces byl ukončen!", Toast.LENGTH_SHORT).show();
     }
-
-
-//    public Home getHome() {
-//        return null;
-//    }
-
-
-//    @Deprecated
-//    public static class Accessories {
-//
-//        static ArrayList<Device> deviceList = new ArrayList<Device>();
-//
-//
-////        void asd() throws JSONException {
-////            JSONObject json = new JSONObject();
-////            json.put("name", "value");
-////        }
-//
-//        @Deprecated
-//        public static void add() {
-//
-//            requester.addDevice();
-//
-//            deviceList.add(new Device(Device.KC_LED, "Pásek", "Kuchyň"));
-//            deviceList.add(new Device(Device.LED_LAMP, "Hlavní světlo", "Kuchyň"));
-//            deviceList.add(new Device(Device.KC_SENSE, "Senzory", "Zahrada"));
-//
-//            Device device = deviceList.get(1);
-//
-//
-//        }
-//
-//        @Nullable
-//        public static Device getDeviceByName(@NonNull String name) {
-//            Device device;
-//            for (int i = 0; i < getDevicesCount(); i++) {
-//                device = deviceList.get(i);
-//                if (device.name.equals(name)) {
-//                    return device;
-//                }
-//            }
-//            return null;
-//        }
-//
-//        public static int getDevicesCount() {
-//            return deviceList.size();
-//        }
-//
-//
-//    }
 
 
 }

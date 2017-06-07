@@ -9,13 +9,14 @@
     <!-- TODO: Update blank fragment layout -->
 
     <EditText
-        android:id="@+id/editText"
+        android:id="@+id/urlEditText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:ems="10"
         android:hint="URL"
-        android:inputType="textPersonName" />
+        android:inputType="textPersonName"
+        android:text="http://keepcube.cz:10380" />
 
 
 </LinearLayout>
